@@ -102,34 +102,34 @@ paymentSelection.addEventListener('change', (e)=>{
     }
 })
 /*
-Form Validation
+Form Validation function to add styling depending on if field returns true or false
+event listener to check for values of fields and test against a regex
 */
 function validate(field, element){
     if(field === false){
         element.classList.add("not-valid")
         element.classList.remove("valid")
-        element.parentNode.style.display = "inline";
+        element.parentElement.lastElementChild.style.display = 'inline'
     }else{
         element.classList.add("valid")
         element.classList.remove("not-valid")
-        element.parentNode.style.display = "inline";
+        element.parentElement.lastElementChild.style.display = "none"
     }
 }
 
 formSubmit.addEventListener('submit', (e)=>{
-    e.preventDefault();
-
+// Validation for name field
     let userName = nameField.value
     let reName = /^[a-zA-Z ]{2,50}$/
     let testName = reName.test(userName)
     validate(testName, nameField);
-
+// Validation for email
     let userEmail = emailAddress.value
     let reEmail = /^[^@]+@[^@]+\.[^@\.]+$/i
     let testEmail = reEmail.test(userEmail)
     validate(testEmail, emailAddress)
 
-    
+//Validation for Activity selection 
     let userActivity
         if(totalCost > 0){
             userActivity = true
@@ -137,7 +137,7 @@ formSubmit.addEventListener('submit', (e)=>{
             userActivity = false
         }
     validate(userActivity, registration.firstElementChild)
-
+//Validation for credit card details
     let userCard = cardNumber.value
     let reCard = /^\d{13,16}$/
     let testCard =  reCard.test(userCard)
@@ -159,7 +159,7 @@ formSubmit.addEventListener('submit', (e)=>{
         testCard = true
         testCvv = true
     }
-
+//If any issues in validation throw an alert and prevent page from refreshing.
     if(
         testEmail == false ||
         testName == false ||
@@ -173,3 +173,13 @@ formSubmit.addEventListener('submit', (e)=>{
         }
 
 })
+// Accessibility for focus on activities
+let active = document.querySelectorAll('#activities input')
+for(let i=0; i<active.length; i++){
+    active[i].addEventListener('blur', ()=>{
+        active[i].parentElement.classList.remove('focus')
+    })
+    active[i].addEventListener('focus', () =>{
+        active[i].parentElement.classList.add('focus')
+    })
+}
