@@ -1,9 +1,12 @@
+/*
+Variables for Name Field
+*/ 
 const nameField = document.getElementById('name')
     nameField.focus();
 
 const jobRole = document.getElementById('title')
 const otherJob = document.getElementById('other-job-role')
-    otherJob.style.visibility = "hidden" 
+    otherJob.hidden = true 
 
 const tshirtDesign = document.getElementById('design')
 const tshirtColor = document.getElementById('color')
@@ -25,8 +28,8 @@ const bitcoin = document.getElementById('bitcoin')
 
 jobRole.addEventListener("change", (e) =>{
     if(e.target.value === "other"){
-otherJob.style.visibility = "visible"
-    }else{otherJob.style.visibility="hidden"
+otherJob.hidden = false
+    }else{otherJob.hidden = true
 
     }
 })
