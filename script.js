@@ -1,5 +1,7 @@
 /*
-Variables for Name Field
+Variables for Name form fields color options
+Name Field is focused in on, other job field is hidden from view
+and Color selector is disabled by default
 */ 
 const nameField = document.getElementById('name')
     nameField.focus();
@@ -13,7 +15,16 @@ const tshirtColor = document.getElementById('color')
 const colorOptions = tshirtColor.children
 
     tshirtColor.disabled = true
+const emailAddress = document.getElementById('email')
+const cardNumber = document.getElementById('cc-num')
+const zipCode = document.getElementById('zip')
+const cvv = document.getElementById('cvv')
+const formSubmit = document.querySelector('form') 
 
+/*
+Variables for Registration checkboxes and Payments.  Credit card field selected 
+by default. PayPal and Bitcoin divs hidden by default.
+*/
 const registration = document.getElementById('activities')
 const activitiesCost = document.getElementById('activities-cost')
 let totalCost = 0
@@ -25,7 +36,18 @@ const paypal = document.getElementById('paypal')
     paypal.hidden = true;
 const bitcoin = document.getElementById('bitcoin')
     bitcoin.hidden = true;
+/*
+Event Handlers:
+Job role - display field if other is selected
 
+Tshirt selector - enable the color selector and filter options based on
+user shirt selection
+
+Registration - Add up the price of the checked boxes or subtract price
+if class is unchecked
+
+Payment section - Swap out which div is visible based on the user selection
+*/
 jobRole.addEventListener("change", (e) =>{
     if(e.target.value === "other"){
 otherJob.hidden = false
@@ -78,4 +100,76 @@ paymentSelection.addEventListener('change', (e)=>{
             paypal.hidden = true
 
     }
+})
+/*
+Form Validation
+*/
+function validate(field, element){
+    if(field === false){
+        element.classList.add("not-valid")
+        element.classList.remove("valid")
+        element.parentNode.style.display = "inline";
+    }else{
+        element.classList.add("valid")
+        element.classList.remove("not-valid")
+        element.parentNode.style.display = "inline";
+    }
+}
+
+formSubmit.addEventListener('submit', (e)=>{
+    e.preventDefault();
+
+    let userName = nameField.value
+    let reName = /^[a-zA-Z ]{2,50}$/
+    let testName = reName.test(userName)
+    validate(testName, nameField);
+
+    let userEmail = emailAddress.value
+    let reEmail = /^[^@]+@[^@]+\.[^@\.]+$/i
+    let testEmail = reEmail.test(userEmail)
+    validate(testEmail, emailAddress)
+
+    
+    let userActivity
+        if(totalCost > 0){
+            userActivity = true
+        }else{
+            userActivity = false
+        }
+    validate(userActivity, registration.firstElementChild)
+
+    let userCard = cardNumber.value
+    let reCard = /^\d{13,16}$/
+    let testCard =  reCard.test(userCard)
+    
+    let userZip = zipCode.value
+    let reZip = /^\d{5}$/
+    let testZip = reZip.test(userZip);
+
+    let userCvv = cvv.value
+    let reCvv = /^\d{3}$/
+    let testCvv = reCvv.test(userCvv)
+
+    if(paymentSelection.value === "credit-card"){
+        validate(testCard, cardNumber)
+        validate(testZip, zipCode)
+        validate(testCvv, cvv)
+    }else{
+        testZip = true
+        testCard = true
+        testCvv = true
+    }
+
+    if(
+        testEmail == false ||
+        testName == false ||
+        testZip == false ||
+        testCard == false ||
+        testCvv == false ||
+        userActivity == false
+        ){ 
+            e.preventDefault();
+            alert("Check required fields to ensure all information provided")
+        }
+
 })
