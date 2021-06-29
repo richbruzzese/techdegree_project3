@@ -27,7 +27,14 @@ by default. PayPal and Bitcoin divs hidden by default.
 */
 const registration = document.getElementById('activities')
 const activitiesCost = document.getElementById('activities-cost')
+const activityBox = document.getElementById('activities-box')
+const activityChildren = activityBox.children
 let totalCost = 0
+const jsLibsCheckbox = activityChildren[1].firstElementChild
+const nodeCheckbox = activityChildren[2].firstElementChild
+const jsFrameCheckbox = activityChildren[3].firstElementChild
+const buildToolsCheckbox = activityChildren[4].firstElementChild
+
 
 const paymentSelection = document.getElementById('payment')
     paymentSelection.children[1].setAttribute('selected', true)
@@ -36,18 +43,15 @@ const paypal = document.getElementById('paypal')
     paypal.hidden = true;
 const bitcoin = document.getElementById('bitcoin')
     bitcoin.hidden = true;
+
+
+
 /*
 Event Handlers:
+
 Job role - display field if other is selected
-
-Tshirt selector - enable the color selector and filter options based on
-user shirt selection
-
-Registration - Add up the price of the checked boxes or subtract price
-if class is unchecked
-
-Payment section - Swap out which div is visible based on the user selection
 */
+
 jobRole.addEventListener("change", (e) =>{
     if(e.target.value === "other"){
 otherJob.hidden = false
@@ -55,7 +59,10 @@ otherJob.hidden = false
 
     }
 })
-
+/*
+Tshirt selector - enable the color selector and filter options based on
+user shirt selection
+*/
 tshirtDesign.addEventListener('change', (e) =>{
     tshirtColor.disabled = false
     let designSelection = e.target.value
@@ -70,7 +77,10 @@ tshirtDesign.addEventListener('change', (e) =>{
         }
     }
 })
-
+/*
+Registration - Add up the price of the checked boxes or subtract price
+if class is unchecked
+*/
 registration.addEventListener('change', (e) =>{
     let price = e.target.getAttribute("data-cost") 
     price = +price
@@ -81,7 +91,9 @@ registration.addEventListener('change', (e) =>{
     }
     activitiesCost.innerHTML= `Total: $${totalCost}`
 })
-
+/*
+Payment section - Swap out which div is visible based on the user selection
+*/
 paymentSelection.addEventListener('change', (e)=>{
     switch(e.target.value){
         case 'credit-card':
@@ -101,6 +113,62 @@ paymentSelection.addEventListener('change', (e)=>{
 
     }
 })
+
+/*
+Checking the Activity Checkboxes to ensure that events that fall within same
+date and time are unable to be selected together.
+*/ 
+activityBox.addEventListener('click', (e) =>{
+    click = e.target.tagName == 'INPUT';
+    if(jsLibsCheckbox.checked == true){
+        jsFrameCheckbox.disabled = true
+    }else{
+        jsFrameCheckbox.disabled=false
+    }
+    if(jsFrameCheckbox.checked == true){
+        jsLibsCheckbox.disabled = true
+    }else{
+        jsLibsCheckbox.disabled = false
+    }
+    if(nodeCheckbox.checked == true){
+        buildToolsCheckbox.disabled = true
+    }else{
+        buildToolsCheckbox.disabled = false
+    }
+    if(buildToolsCheckbox.checked == true){
+        nodeCheckbox.disabled = true
+    }else{
+        nodeCheckbox.disabled = false
+    }
+})
+/* 
+Email Address check.  This will check in real time whether the email address meets
+the necessary requirments prior to submission.
+*/
+emailAddress.addEventListener('change', (e)=>{
+    let emailInput = e.target.value
+    let reEmail = /^[^@]+@[^@]+\.[^@\.]+$/i
+    let inputTest = reEmail.test(emailInput)
+        if(inputTest == false ){
+            e.target.classList.add("not-valid")
+            e.target.classList.remove("valid")
+            e.target.parentElement.lastElementChild.style.display = "inline"
+            e.target.parentElement.lastElementChild.style.color = "red"
+            e.target.parentElement.lastElementChild.innerHTML = 'Email Invalid. Check entry and try again'
+            if(emailInput == ''){
+                e.target.parentElement.lastElementChild.innerHTML = "Email Invalid:<br> Email can't be blank"
+            }else if(!emailInput.includes('@')){
+                e.target.parentElement.lastElementChild.innerHTML = "Email Invalid:<br> Email must contain an @"
+            }
+        }else{
+            e.target.classList.add("valid")
+            e.target.classList.remove("not-valid")
+            e.target.parentElement.lastElementChild.style.display = "inline"
+            e.target.parentElement.lastElementChild.style.color = "green"
+            e.target.parentElement.lastElementChild.innerHTML = 'Email Valid'
+        }
+})
+
 /*
 Form Validation function to add styling depending on if field returns true or false
 event listener to check for values of fields and test against a regex
