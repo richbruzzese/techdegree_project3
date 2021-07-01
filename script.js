@@ -177,11 +177,11 @@ function validate(field, element){
     if(field === false){
         element.classList.add("not-valid")
         element.classList.remove("valid")
-        element.parentElement.lastElementChild.style.display = 'inline'
+        element.lastElementChild.style.display = 'inline'
     }else{
         element.classList.add("valid")
         element.classList.remove("not-valid")
-        element.parentElement.lastElementChild.style.display = "none"
+        element.lastElementChild.style.display = "none"
     }
 }
 
@@ -190,12 +190,12 @@ formSubmit.addEventListener('submit', (e)=>{
     let userName = nameField.value
     let reName = /^[a-zA-Z ]{2,50}$/
     let testName = reName.test(userName)
-    validate(testName, nameField);
+    validate(testName, nameField.parentElement);
 // Validation for email
     let userEmail = emailAddress.value
     let reEmail = /^[^@]+@[^@]+\.[^@\.]+$/i
     let testEmail = reEmail.test(userEmail)
-    validate(testEmail, emailAddress)
+    validate(testEmail, emailAddress.parentElement)
 
 //Validation for Activity selection 
     let userActivity
@@ -219,9 +219,9 @@ formSubmit.addEventListener('submit', (e)=>{
     let testCvv = reCvv.test(userCvv)
 
     if(paymentSelection.value === "credit-card"){
-        validate(testCard, cardNumber)
-        validate(testZip, zipCode)
-        validate(testCvv, cvv)
+        validate(testCard, cardNumber.parentElement)
+        validate(testZip, zipCode.parentElement)
+        validate(testCvv, cvv.parentElement)
     }else{
         testZip = true
         testCard = true
@@ -237,7 +237,6 @@ formSubmit.addEventListener('submit', (e)=>{
         userActivity == false
         ){ 
             e.preventDefault();
-            alert("Check required fields to ensure all information provided")
         }
 
 })
