@@ -155,6 +155,7 @@ emailAddress.addEventListener('change', (e)=>{
             e.target.parentElement.lastElementChild.style.display = "inline"
             e.target.parentElement.lastElementChild.style.color = "red"
             e.target.parentElement.lastElementChild.innerHTML = 'Email Invalid. Check entry and try again'
+            validate(inputTest, emailAddress.parentElement)
             if(emailInput == ''){
                 e.target.parentElement.lastElementChild.innerHTML = "Email Invalid:<br> Email can't be blank"
             }else if(!emailInput.includes('@')){
@@ -165,7 +166,7 @@ emailAddress.addEventListener('change', (e)=>{
             e.target.classList.remove("not-valid")
             e.target.parentElement.lastElementChild.style.display = "inline"
             e.target.parentElement.lastElementChild.style.color = "green"
-            e.target.parentElement.lastElementChild.innerHTML = 'Email Valid'
+            validate(inputTest, emailAddress.parentElement)
         }
 })
 
